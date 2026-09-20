@@ -20,7 +20,7 @@ public class ReportingServicieHealth implements HealthIndicator {
 
     }
     private boolean cherckReportingServiceHealth(){
-        return  true;
+        return  false;
     }
 }
 
