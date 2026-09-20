@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: smartmetro-api
+
+logging:
+  level:
+    com:
+      smartmetro: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+  file:
+    name: logs/smartmetro-api.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
