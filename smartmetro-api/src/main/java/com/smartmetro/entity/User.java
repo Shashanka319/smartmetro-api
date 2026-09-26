@@ -14,24 +14,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_id_seq")
     @SequenceGenerator(name = "user_id_seq",sequenceName = "users_seq",allocationSize=1)
-    @Column(name="user_id")
+    @Column(name="USER_ID ")
     private Integer userId;
-    @Column(name="name")
+    @Column(name="FULL_NAME")
     private String userName;
-    @Column(name="email")
+    @Column(name="EMAIL")
     private String email;
-    @Column(name="phone")
+    @Column(name="PHONE_NUMBER")
     private Long phone;
-    @Column(name = "password")
+    @Column(name = "PASSWORD_HASH")
     private String password;
-    @Column(name = "role")
-    private String role;
-    @Column(name = "created_at")
+    @Column(name = "CREATED_AT")
     private LocalDate date;
+    @Column(name = "ROLE")
+    private String role;
 
     @OneToMany(mappedBy = "user1")
     private Set<MetroCard> metroCards;
-
-
 
 }
