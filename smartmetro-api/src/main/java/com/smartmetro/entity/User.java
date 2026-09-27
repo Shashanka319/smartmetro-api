@@ -24,12 +24,12 @@ public class User {
     private Long phone;
     @Column(name = "PASSWORD_HASH")
     private String password;
-    @Column(name = "CREATED_AT")
-    private LocalDate date;
     @Column(name = "ROLE")
     private String role;
+    @Column(name = "CREATED_AT")
+    private LocalDate date;
 
-    @OneToMany(mappedBy = "user1")
+    @OneToMany(mappedBy = "user")
     private Set<MetroCard> metroCards;
 
 }

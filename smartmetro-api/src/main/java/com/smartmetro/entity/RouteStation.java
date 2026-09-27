@@ -1,26 +1,40 @@
 package com.smartmetro.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "route_station")
+@IdClass(RouteStation.RouteStationPK.class)
 public class RouteStation {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "route_station_id_seq")
-    @SequenceGenerator(name = "route_station_id_seq",sequenceName = "route_station_seq",allocationSize=1)
-    @Column(name = "route_id")
-    private Long route;
-    @Column(name = "station_id")
-    private Long stationId;
-    @Column(name = "sequence_no")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ROUTE_ID", referencedColumnName = "ROUTE_ID")
+    private Route route;
+
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STATION_ID", referencedColumnName = "STATION_ID")
+    private Station station;
+
+    @Column(name = "SEQUENCE_NO")
     private Long sequenceNo;
 
-    @ManyToOne
-    @JoinColumn(name = "txn_id")
-    private TransactionHistory transactionHistory;
-
+    // Embedded composite key matching (route_id, station_id)
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class RouteStationPK implements Serializable {
+        private Long route;
+        private Long station;
+    }
 }

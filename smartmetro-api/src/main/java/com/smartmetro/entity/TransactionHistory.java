@@ -13,21 +13,22 @@ import java.time.LocalDateTime;
 public class TransactionHistory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "txn_id_seq")
-    @SequenceGenerator(name = "txn_id_seq",sequenceName = "txn_history_seq",allocationSize=1)
-    @Column(name = "txn_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "txn_id_seq")
+    @SequenceGenerator(name = "txn_id_seq", sequenceName = "txn_history_seq", allocationSize = 1)
+    @Column(name = "TXN_ID")
     private Long transactionId;
 
-    @Column(name = "amount")
-    private double amount;
+    @Column(name = "AMOUNT")
+    private Double amount;
 
-    @Column(name = "txn_type")
+    @Column(name = "TXN_TYPE")
     private String transactionType;
 
-    @Column(name = "txn_date")
+    @Column(name = "TXN_DATE")
     private LocalDateTime transactionDate;
 
-    @ManyToOne
-    @JoinColumn(name = "card_id")
-    private  MetroCard metroCard1;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CARD_ID")
+    private MetroCard metroCard;
+
 }

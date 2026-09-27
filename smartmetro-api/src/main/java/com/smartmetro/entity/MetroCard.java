@@ -3,6 +3,7 @@ package com.smartmetro.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -11,37 +12,33 @@ import java.util.Set;
 @Entity
 @Table(name = "metro_card")
 public class MetroCard {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "metro_card_id_seq")
-    @SequenceGenerator(name = "metro_card_id_seq",sequenceName = "metro_card_seq",allocationSize=1)
-    @Column(name = "card_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metro_card_id_seq")
+    @SequenceGenerator(name = "metro_card_id_seq", sequenceName = "metro_card_seq", allocationSize = 1)
+    @Column(name = "CARD_ID")
     private Long cardId;
 
-    @Column(name = "card_number")
+    @Column(name = "CARD_NUMBER")
     private String cardNumber;
 
-    @Column(name = "balance")
-    private double balance;
+    @Column(name = "BALANCE")
+    private Double balance;
 
-    @Column(name = "status")
+    @Column(name = "STATUS")
     private String status;
 
-    @Column(name = "issued_date")
+    @Column(name = "ISSUED_DATE")
     private LocalDate issuedDate;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private  User user1;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @OneToMany(mappedBy = "metroCard")
     private Set<Trip> trips;
 
-    @OneToMany
+    @OneToMany(mappedBy = "metroCard")
     private Set<TransactionHistory> transactionHistories;
 
-    @OneToMany(mappedBy = "metroCard1")
-    private Set<TransactionHistory> transactionHistories1;
-
-    @OneToOne
-    private Station station;
 }

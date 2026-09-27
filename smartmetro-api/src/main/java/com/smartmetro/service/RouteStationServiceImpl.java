@@ -26,8 +26,8 @@ public class RouteStationServiceImpl implements RouteStationService {
         }
         List<RouteStationTO> routeStationTOS = routeStations.stream().map(routeStation -> {
             RouteStationTO routeStationTO = new RouteStationTO();
-            routeStationTO.setRoute(routeStation.getRoute());
-            routeStationTO.setStationId(routeStation.getStationId());
+            routeStationTO.setRoute(routeStation.getRoute().getRouteId());
+            routeStationTO.setStationId(routeStation.getStation().getStationId());
             routeStationTO.setSequenceNo(routeStation.getSequenceNo());
             return routeStationTO;
 

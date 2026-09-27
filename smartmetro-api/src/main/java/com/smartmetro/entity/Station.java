@@ -14,19 +14,25 @@ public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "station_id_seq")
     @SequenceGenerator(name = "station_id_seq",sequenceName = "station_seq",allocationSize=1)
-    @Column(name = "station_id")
+    @Column(name = "STATION_ID")
     private Long stationId;
-    @Column(name = "station_name")
+    @Column(name = "STATION_NAME")
     private String stationName;
-    @Column(name = "station_code")
+    @Column(name = "STATION_CODE")
     private String stationCode;
     @Column(name = "location")
-    private String location;
+    private String LOCATION ;
 
-    @OneToOne(mappedBy = "station")
-    private MetroCard metroCard2;
+    //@OneToOne(mappedBy = "station")
+    //private MetroCard metroCard2;
 
     @OneToMany(mappedBy = "station")
-    private List<MetroCard> metroCards;
+    private List<RouteStation> routeStations;
+
+    @OneToMany(mappedBy = "entryStation")
+    private List<Trip> entryTrips;
+
+    @OneToMany(mappedBy = "exitStation")
+    private List<Trip> exitTrips;
 
 }

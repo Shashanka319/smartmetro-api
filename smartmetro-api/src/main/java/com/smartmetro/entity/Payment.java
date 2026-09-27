@@ -15,21 +15,21 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "payment_id_seq")
     @SequenceGenerator(name = "payment_id_seq",sequenceName = "payment_seq",allocationSize=1)
-    @Column(name = "payment_id")
+    @Column(name = "PAYMENT_ID ")
     private Long paymentId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", referencedColumnName = "card_id")
+    @JoinColumn(name = "CARD_ID  ", referencedColumnName = "card_id")
     private MetroCard metroCard;
 
-    @Column(name = "amount")
+    @Column(name = "AMOUNT ")
     private double amount;
 
-    @Column(name = "payment_method")
+    @Column(name = "PAYMENT_METHOD")
     private String paymentType;
 
-    @Column(name = "status")
+    @Column(name = "STATUS")
     private String paymentStatus;
 
-    @Column(name = "payment_date")
+    @Column(name = "PAYMENT_DATE ")
     private LocalDateTime paymentDate;
 }

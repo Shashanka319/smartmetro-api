@@ -8,23 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 @Slf4j
 @RestController
+@RequestMapping("/api/v1/transactions")
 public class TransactionController {
     @Autowired
     private TransactionService transactionService;
     @GetMapping                                 //Read the Data Source
-    public ResponseEntity<List<TransactionHistoryTO>> getAllUsers() {
-        log.info("Inside the getAllUsers method");
+    public ResponseEntity<List<TransactionHistoryTO>> getAllTransactions() {
+        log.info("Inside the getAllTransactions method");
         List<TransactionHistoryTO> transactionHistoryTOS =null;
         try{
             transactionHistoryTOS = transactionService.findAllTransactions();
         }
         catch (TransactionHistoryNotFoundException e){
-            log.error("User not found");
+            log.error("Transaction not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);//400 error
         }
         catch (Exception e){

@@ -30,7 +30,7 @@ public class StationServiceImpl implements StationService {
             stationTO.setStationId(station.getStationId());
             stationTO.setStationName(station.getStationName());
             stationTO.setStationCode(station.getStationCode());
-            stationTO.setLocation(station.getLocation());
+            stationTO.setLocation(station.getLOCATION());
             return stationTO;
 
         }).toList();

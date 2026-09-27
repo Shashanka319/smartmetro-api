@@ -14,9 +14,9 @@ public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "route_id_seq")
     @SequenceGenerator(name = "route_id_seq",sequenceName = "route_seq",allocationSize=1)
-    @Column(name = "route_id")
+    @Column(name = "ROUTE_ID")
     private Long routeId;
-    @Column(name = "route_name")
+    @Column(name = "ROUTE_NAME")
     private String routeName;
 
     @OneToMany(mappedBy = "route")

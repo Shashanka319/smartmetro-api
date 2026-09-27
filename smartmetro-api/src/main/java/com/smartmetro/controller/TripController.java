@@ -21,14 +21,14 @@ public class TripController {
     @Autowired
     private TripService tripService;
     @GetMapping                                 //Read the Data Source
-    public ResponseEntity<List<TripTO>> getAllUsers() {
-        log.info("Inside the getAllUsers method");
+    public ResponseEntity<List<TripTO>> getAllTrips() {
+        log.info("Inside the getAllTrip method");
         List<TripTO> tripTo=null;
         try{
             tripTo=tripService.findAllTrips();
         }
         catch (TripNotFoundException e){
-            log.error("User not found");
+            log.error("Trip is not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);//400 error
         }
         catch (Exception e){

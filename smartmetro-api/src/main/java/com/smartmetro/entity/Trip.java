@@ -13,34 +13,30 @@ import java.time.LocalDateTime;
 public class Trip {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "trip_id_seq")
-    @SequenceGenerator(name = "trip_id_seq",sequenceName = "trip_seq",allocationSize=1)
-    @Column(name = "trip_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trip_id_seq")
+    @SequenceGenerator(name = "trip_id_seq", sequenceName = "trip_seq", allocationSize = 1)
+    @Column(name = "TRIP_ID")
     private Long tripId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
+    @JoinColumn(name = "CARD_ID")
     private MetroCard metroCard;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "entry_station_id")
+    @JoinColumn(name = "ENTRY_STATION_ID")
     private Station entryStation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exit_station_id")
+    @JoinColumn(name = "EXIT_STATION_ID")
     private Station exitStation;
 
-    @Column(name = "start_time")
+    @Column(name = "START_TIME")
     private LocalDateTime startTime;
 
-    @Column(name = "end_time")
+    @Column(name = "END_TIME")
     private LocalDateTime endTime;
 
-    @Column(name = "fare_amount")
-    private double fareAmount;
-
-    @ManyToOne()
-    @JoinColumn(name = "station_id")
-    private Station station;
+    @Column(name = "FARE_AMOUNT")
+    private Double fareAmount;
 
 }
