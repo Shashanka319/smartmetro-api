@@ -1,16 +1,13 @@
 package com.smartmetro.controller;
 
 import com.smartmetro.exception.MetroCardNotFoundException;
-import com.smartmetro.exception.PaymentNotFoundException;
 import com.smartmetro.model.MetroCardTO;
 import com.smartmetro.service.MetroCardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,23 +15,36 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/api/v1/metroCards")
 public class MetroCardController {
+
     @Autowired
     private MetroCardService metroCardService;
-    @GetMapping                                 //Read the Data Source
+
+    @GetMapping
     public ResponseEntity<List<MetroCardTO>> getAllMetroCards() {
         log.info("Inside the getAllMetroCards method");
-        List<MetroCardTO> metroCardTOS =null;
-        try{
-            metroCardTOS =metroCardService.findAllMetroCards();
+        try {
+            List<MetroCardTO> metroCardTOS = metroCardService.findAllMetroCards();
+            return ResponseEntity.ok(metroCardTOS);
+        } catch (MetroCardNotFoundException e) {
+            log.error("MetroCard not found: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Exception occurred while fetching cards: ", e); // Added 'e' to see stack trace
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        catch (MetroCardNotFoundException e){
-            log.error("MetroCard is  not found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);//400 error
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<MetroCardTO> getMetroCardById(@PathVariable Long id) {
+        log.info("Inside the getMetroCardById method for id: {}", id);
+        try {
+            MetroCardTO metroCardTO = metroCardService.findMetroCardById(id);
+            return ResponseEntity.ok(metroCardTO);
+        } catch (MetroCardNotFoundException e) {
+            log.error("MetroCard not found with id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Exception occurred while fetching card with id {}: ", id, e); // Added 'e'
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        catch (Exception e){
-            log.error("Exception Occured Check Once");
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);//500 error
-        }
-        return new ResponseEntity<>(metroCardTOS,HttpStatus.OK);
     }
 }

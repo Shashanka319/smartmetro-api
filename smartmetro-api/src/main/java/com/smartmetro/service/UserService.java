@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserService {
     public List<UserTO> findAllUsers() throws UserNotFoundException;
+    public UserTO findUserByID(int id) throws UserNotFoundException;
 }
