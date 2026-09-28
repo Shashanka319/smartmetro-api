@@ -1,5 +1,6 @@
 package com.smartmetro.model;
 
+import com.smartmetro.entity.Payment;
 import com.smartmetro.entity.TransactionHistory;
 import com.smartmetro.entity.Trip;
 import lombok.Getter;
@@ -24,4 +25,6 @@ public class MetroCardTO {
      Set<TripTO> trips;
 
     Set<TransactionHistoryTO> transactionHistories;
+
+     Set<PaymentTO> payments;
 }

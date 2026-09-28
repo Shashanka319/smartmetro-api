@@ -41,4 +41,7 @@ public class MetroCard {
     @OneToMany(mappedBy = "metroCard")
     private Set<TransactionHistory> transactionHistories;
 
+    @OneToMany(mappedBy = "metroCard")
+    private Set<Payment> payments;
+
 }
