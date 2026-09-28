@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PaymentService {
     List<PaymentTO> findAllPayments() throws PaymentNotFoundException;
+    PaymentTO findPaymentById(Long paymentId) throws PaymentNotFoundException;
 }

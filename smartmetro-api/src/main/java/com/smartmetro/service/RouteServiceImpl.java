@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,5 +47,29 @@ public class RouteServiceImpl implements RouteService {
         }).toList();
         log.info("Total Users Found: {}", routeTOS.size());
         return routeTOS;
+    }
+
+    @Override
+    public RouteTO findRouteById(Long id) throws RouteNotFoundException {
+        log.info("Inside the RouteServiceImpl.findRouteById");
+        Optional<Route> route = routeRepository.findById(id);
+        if(route.isEmpty()){
+            log.error("Route not found");
+            throw new RouteNotFoundException("Route not found");
+        }
+        RouteTO routeTO = new RouteTO();
+        routeTO.setRouteId(route.get().getRouteId());
+        routeTO.setRouteName(route.get().getRouteName());
+        if(route.get().getRouteStations() != null) {
+            Set<RouteStationTO> routeStationTOS = route.get().getRouteStations().stream().map(routeStation -> {
+                RouteStationTO routeStationTO = new RouteStationTO();
+                routeStationTO.setStationId(routeStationTO.getStationId());
+                routeStationTO.setRoute(routeStationTO.getRoute());
+                routeStationTO.setSequenceNo(routeStationTO.getSequenceNo());
+                return routeStationTO;
+            }).collect(Collectors.toSet());
+            routeTO.setRouteStations(routeStationTOS);
+        }
+        return routeTO;
     }
 }

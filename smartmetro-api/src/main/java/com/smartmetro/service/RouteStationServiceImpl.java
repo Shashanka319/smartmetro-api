@@ -35,4 +35,9 @@ public class RouteStationServiceImpl implements RouteStationService {
         log.info("Total Users Found: {}", routeStationTOS.size());
         return routeStationTOS;
     }
+
+    @Override
+    public RouteStationTO findRouteStationById(Long id) throws RouteStationNotFoundException {
+        return null;
+    }
 }

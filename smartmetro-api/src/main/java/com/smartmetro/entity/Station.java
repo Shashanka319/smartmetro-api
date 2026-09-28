@@ -29,10 +29,10 @@ public class Station {
     @OneToMany(mappedBy = "station")
     private List<RouteStation> routeStations;
 
-    @OneToMany(mappedBy = "entryStation")
-    private List<Trip> entryTrips;
+  //  @OneToMany(mappedBy = "entryStation")
+   // private List<Trip> entryTrips;
 
-    @OneToMany(mappedBy = "exitStation")
-    private List<Trip> exitTrips;
+   // @OneToMany(mappedBy = "exitStation")
+    //private List<Trip> exitTrips;
 
 }

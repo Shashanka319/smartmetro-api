@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RouteStationService {
     List<RouteStationTO> findAllRouteStations() throws RouteStationNotFoundException;
+    RouteStationTO findRouteStationById(Long id) throws RouteStationNotFoundException;
 }
