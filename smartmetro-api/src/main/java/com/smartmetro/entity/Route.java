@@ -16,6 +16,7 @@ public class Route {
     @SequenceGenerator(name = "route_id_seq",sequenceName = "route_seq",allocationSize=1)
     @Column(name = "ROUTE_ID")
     private Long routeId;
+
     @Column(name = "ROUTE_NAME")
     private String routeName;
 
