@@ -38,6 +38,21 @@ public class RouteStationServiceImpl implements RouteStationService {
 
     @Override
     public RouteStationTO findRouteStationById(Long id) throws RouteStationNotFoundException {
-        return null;
+        log.info("Inside the RouteStationServiceImpl.findAllUsers");
+        List<RouteStation> routeStations = routeStationRepository.findAll();
+        if(routeStations.isEmpty()) {
+            log.error("RouteStations are not Found");
+            throw new RouteStationNotFoundException("RouteStations are Empty");
+        }
+        List<RouteStationTO> routeStationTOS = routeStations.stream().map(routeStation -> {
+            RouteStationTO routeStationTO = new RouteStationTO();
+            routeStationTO.setRoute(routeStation.getRoute().getRouteId());
+            routeStationTO.setStationId(routeStation.getStation().getStationId());
+            routeStationTO.setSequenceNo(routeStation.getSequenceNo());
+            return routeStationTO;
+
+        }).toList();
+        log.info("Total Users Found: {}", routeStationTOS.size());
+        return routeStationTOS;
     }
 }

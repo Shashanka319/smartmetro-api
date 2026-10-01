@@ -60,3 +60,8 @@
 2026-09-28T21:39:49.853+05:30  INFO 9996 --- [smartmetro-api] [http-nio-8084-exec-2] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 311 ms
 2026-09-28T21:40:01.720+05:30  INFO 9996 --- [smartmetro-api] [http-nio-8084-exec-2] c.s.controller.MetroCardController       : Inside the getMetroCardById method for id: 2
 2026-09-28T21:40:01.720+05:30  INFO 9996 --- [smartmetro-api] [http-nio-8084-exec-2] c.s.service.MetroCardServiceImpl         : Inside the MetroCardServiceImpl.findMetroCardById
+2026-09-28T23:02:48.778+05:30  INFO 9996 --- [smartmetro-api] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-28T23:02:48.786+05:30  INFO 9996 --- [smartmetro-api] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-09-28T23:02:48.803+05:30  INFO 9996 --- [smartmetro-api] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-28T23:02:48.812+05:30  INFO 9996 --- [smartmetro-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-09-28T23:02:48.817+05:30  INFO 9996 --- [smartmetro-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
