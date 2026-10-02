@@ -1,59 +1,82 @@
 package com.smartmetro.service;
 
 import com.smartmetro.entity.RouteStation;
+import com.smartmetro.entity.RouteStation.RouteStationPK;
 import com.smartmetro.exception.RouteStationNotFoundException;
 import com.smartmetro.model.RouteStationTO;
 import com.smartmetro.repository.RouteStationRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RouteStationServiceImpl implements RouteStationService {
-    @Autowired
-    private RouteStationRepository routeStationRepository;
+
+    private final RouteStationRepository routeStationRepository;
 
     @Override
     public List<RouteStationTO> findAllRouteStations() throws RouteStationNotFoundException {
-        log.info("Inside the RouteStationServiceImpl.findAllUsers");
+        log.info("Inside RouteStationServiceImpl.findAllRouteStations");
         List<RouteStation> routeStations = routeStationRepository.findAll();
-        if(routeStations.isEmpty()) {
-            log.error("RouteStations are not Found");
+
+        if (routeStations.isEmpty()) {
+            log.error("No route stations found");
             throw new RouteStationNotFoundException("RouteStations are Empty");
         }
-        List<RouteStationTO> routeStationTOS = routeStations.stream().map(routeStation -> {
-            RouteStationTO routeStationTO = new RouteStationTO();
-            routeStationTO.setRoute(routeStation.getRoute().getRouteId());
-            routeStationTO.setStationId(routeStation.getStation().getStationId());
-            routeStationTO.setSequenceNo(routeStation.getSequenceNo());
-            return routeStationTO;
 
-        }).toList();
-        log.info("Total Users Found: {}", routeStationTOS.size());
-        return routeStationTOS;
+        List<RouteStationTO> routeStationTOs = routeStations.stream()
+                .map(this::mapToTO)
+                .toList();
+
+        log.info("Total RouteStations Found: {}", routeStationTOs.size());
+        return routeStationTOs;
     }
 
     @Override
-    public RouteStationTO findRouteStationById(Long id) throws RouteStationNotFoundException {
-        log.info("Inside the RouteStationServiceImpl.findRouteStationById");
-        Optional<RouteStation> routeStations = routeStationRepository.findById(id);
-        if(routeStations.isEmpty()) {
-            log.error("RouteStations are not Found");
-            throw new RouteStationNotFoundException("RouteStations are Empty");
-        }
-        RouteStation station = routeStations.get();
-        RouteStationTO routeStationTOss = new  RouteStationTO();
-        routeStationTOss.setRoute(station.getRoute().getRouteId());
-        routeStationTOss.setStationId(station.getStation().getStationId());
-        routeStationTOss.setSequenceNo(station.getSequenceNo());
-        return routeStationTOss;
+    public RouteStationTO findRouteStationById(Long routeId, Long stationId) throws RouteStationNotFoundException {
+        log.info("Inside RouteStationServiceImpl.findRouteStationById for routeId: {} and stationId: {}", routeId, stationId);
+
+        RouteStationPK pk = new RouteStationPK();
+        pk.setRoute(routeId);
+        pk.setStation(stationId);
+
+        return routeStationRepository.findById(pk)
+                .map(this::mapToTO)
+                .orElseThrow(() -> {
+                    log.error("RouteStation not found for routeId: {} and stationId: {}", routeId, stationId);
+                    return new RouteStationNotFoundException(
+                            "RouteStation not found for Route: " + routeId + " and Station: " + stationId);
+                });
     }
 
- }
+    @Override
+    public List<RouteStationTO> findRouteStationsByRouteId(Long routeId) throws RouteStationNotFoundException {
+        log.info("Inside RouteStationServiceImpl.findRouteStationsByRouteId for routeId: {}", routeId);
+        List<RouteStation> routeStations = routeStationRepository.findByRoute_RouteId(routeId);
 
+        if (routeStations.isEmpty()) {
+            log.error("No stations found for Route ID: {}", routeId);
+            throw new RouteStationNotFoundException("No route stations found for Route ID: " + routeId);
+        }
 
+        return routeStations.stream()
+                .map(this::mapToTO)
+                .toList();
+    }
 
+    private RouteStationTO mapToTO(RouteStation routeStation) {
+        RouteStationTO to = new RouteStationTO();
+        if (routeStation.getRoute() != null) {
+            to.setRoute(routeStation.getRoute().getRouteId());
+        }
+        if (routeStation.getStation() != null) {
+            to.setStationId(routeStation.getStation().getStationId());
+        }
+        to.setSequenceNo(routeStation.getSequenceNo());
+        return to;
+    }
+}

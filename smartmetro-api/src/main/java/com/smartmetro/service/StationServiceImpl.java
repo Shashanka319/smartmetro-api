@@ -1,80 +1,83 @@
 package com.smartmetro.service;
 
+import com.smartmetro.entity.RouteStation;
 import com.smartmetro.entity.Station;
 import com.smartmetro.exception.StationNotFoundException;
 import com.smartmetro.model.RouteStationTO;
 import com.smartmetro.model.StationTO;
-import com.smartmetro.model.UserTO;
 import com.smartmetro.repository.StationRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class StationServiceImpl implements StationService {
-    @Autowired
-    private StationRepository stationRepository;
+
+    private final StationRepository stationRepository;
 
     @Override
     public List<StationTO> findAllStations() throws StationNotFoundException {
-        log.info("Inside the StaionServiceImpl.findAllUsers");
+        log.info("Inside the StationServiceImpl.findAllStations");
         List<Station> stations = stationRepository.findAll();
-        if(stations.isEmpty()) {
-            log.error("Stations are not Found");
+
+        if (stations.isEmpty()) {
+            log.error("No stations found in the database");
             throw new StationNotFoundException("Stations are Empty");
         }
-        List<StationTO> stationTOS = stations.stream().map(station -> {
-            StationTO stationTO = new StationTO();
-            stationTO.setStationId(station.getStationId());
-            stationTO.setStationName(station.getStationName());
-            stationTO.setStationCode(station.getStationCode());
-            stationTO.setLocation(station.getLOCATION());
-            if(station.getRouteStations() != null) {
-                Set<RouteStationTO> routeStationTOSet = station.getRouteStations().stream().map(routeStation->{
-                    RouteStationTO routeStationTO = new RouteStationTO();
-                    routeStationTO.setStationId(routeStation.getStation().getStationId());
-                    routeStationTO.setRoute(routeStation.getRoute().getRouteId());
-                    return routeStationTO;
-                }).collect(Collectors.toSet());
-                stationTO.getRouteStations().addAll(routeStationTOSet);
-            }
-            return stationTO;
 
-        }).toList();
-        log.info("Total Stations Found: {}", stationTOS.size());
-        return stationTOS;
+        List<StationTO> stationTOList = stations.stream()
+                .map(this::mapToStationTO)
+                .toList();
+
+        log.info("Total Stations Found: {}", stationTOList.size());
+        return stationTOList;
     }
 
     @Override
     public StationTO findStationById(Long id) throws StationNotFoundException {
-        log.info("Inside the StaionServiceImpl.findStationById");
-        Optional<Station> station = stationRepository.findById(id);
-        if(station.isEmpty()) {
-            log.error("Stations are not Found");
-            throw new StationNotFoundException("Stations are Empty");
-        }
-        Station station1 = station.get();
+        log.info("Inside the StationServiceImpl.findStationById for id: {}", id);
+
+        return stationRepository.findById(id)
+                .map(this::mapToStationTO)
+                .orElseThrow(() -> {
+                    log.error("Station with ID {} not found", id);
+                    return new StationNotFoundException("Station not found for ID: " + id);
+                });
+    }
+
+    private StationTO mapToStationTO(Station station) {
         StationTO stationTO = new StationTO();
-        stationTO.setStationId(station1.getStationId());
-        stationTO.setStationName(station1.getStationName());
-        stationTO.setStationCode(station1.getStationCode());
-        stationTO.setLocation(station1.getLOCATION());
-        if(station1.getRouteStations() != null) {
-            Set<RouteStationTO> routeStationTOSet = station1.getRouteStations().stream().map(routeStation->{
-                RouteStationTO routeStationTO = new RouteStationTO();
-                routeStationTO.setStationId(routeStation.getStation().getStationId());
-                routeStationTO.setRoute(routeStation.getRoute().getRouteId());
-                return routeStationTO;
-            }).collect(Collectors.toSet());
-            stationTO.setRouteStations((List<RouteStationTO>) routeStationTOSet);
+        stationTO.setStationId(station.getStationId());
+        stationTO.setStationName(station.getStationName());
+        stationTO.setStationCode(station.getStationCode());
+        stationTO.setLocation(station.getLOCATION());
+
+        if (station.getRouteStations() != null && !station.getRouteStations().isEmpty()) {
+            List<RouteStationTO> routeStationTOList = station.getRouteStations().stream()
+                    .map(this::mapToRouteStationTO)
+                    .toList();
+            stationTO.setRouteStations(routeStationTOList);
+        } else {
+            stationTO.setRouteStations(Collections.emptyList());
         }
+
         return stationTO;
+    }
+
+    private RouteStationTO mapToRouteStationTO(RouteStation routeStation) {
+        RouteStationTO routeStationTO = new RouteStationTO();
+        if (routeStation.getStation() != null) {
+            routeStationTO.setStationId(routeStation.getStation().getStationId());
+        }
+        if (routeStation.getRoute() != null) {
+            routeStationTO.setRoute(routeStation.getRoute().getRouteId());
+        }
+        routeStationTO.setSequenceNo(routeStation.getSequenceNo());
+        return routeStationTO;
     }
 }

@@ -1,15 +1,15 @@
 package com.smartmetro.controller;
 
+import com.smartmetro.exception.StationNotFoundException;
 import com.smartmetro.exception.TripNotFoundException;
-import com.smartmetro.exception.UserNotFoundException;
 import com.smartmetro.model.TripTO;
-import com.smartmetro.model.UserTO;
 import com.smartmetro.service.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +37,19 @@ public class TripController {
         }
         return new ResponseEntity<>( tripTo,HttpStatus.OK);
 
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<TripTO> getTripById(@PathVariable Long id) {
+        log.info("Inside the getTripById method for id: {}", id);
+        try {
+            TripTO tripTO = tripService.findTripById(id);
+            return ResponseEntity.ok(tripTO);
+        } catch (TripNotFoundException e) {
+            log.error("Trips is not found with id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Exception occurred while fetching card with id {}: ", id, e); // Added 'e'
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
