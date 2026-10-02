@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,5 +50,31 @@ public class StationServiceImpl implements StationService {
         }).toList();
         log.info("Total Stations Found: {}", stationTOS.size());
         return stationTOS;
+    }
+
+    @Override
+    public StationTO findStationById(Long id) throws StationNotFoundException {
+        log.info("Inside the StaionServiceImpl.findStationById");
+        Optional<Station> station = stationRepository.findById(id);
+        if(station.isEmpty()) {
+            log.error("Stations are not Found");
+            throw new StationNotFoundException("Stations are Empty");
+        }
+        Station station1 = station.get();
+        StationTO stationTO = new StationTO();
+        stationTO.setStationId(station1.getStationId());
+        stationTO.setStationName(station1.getStationName());
+        stationTO.setStationCode(station1.getStationCode());
+        stationTO.setLocation(station1.getLOCATION());
+        if(station1.getRouteStations() != null) {
+            Set<RouteStationTO> routeStationTOSet = station1.getRouteStations().stream().map(routeStation->{
+                RouteStationTO routeStationTO = new RouteStationTO();
+                routeStationTO.setStationId(routeStation.getStation().getStationId());
+                routeStationTO.setRoute(routeStation.getRoute().getRouteId());
+                return routeStationTO;
+            }).collect(Collectors.toSet());
+            stationTO.setRouteStations((List<RouteStationTO>) routeStationTOSet);
+        }
+        return stationTO;
     }
 }

@@ -1,15 +1,15 @@
 package com.smartmetro.controller;
 
+import com.smartmetro.exception.MetroCardNotFoundException;
 import com.smartmetro.exception.StationNotFoundException;
-import com.smartmetro.exception.TransactionHistoryNotFoundException;
 import com.smartmetro.model.StationTO;
-import com.smartmetro.model.TransactionHistoryTO;
 import com.smartmetro.service.StationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,5 +38,19 @@ public class StationController {
         }
         return new ResponseEntity<>(stationTo,HttpStatus.OK);
 
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<StationTO> getStationById(@PathVariable Long id) {
+        log.info("Inside the getMetroCardById method for id: {}", id);
+        try {
+            StationTO stationTO = stationService.findStationById(id);
+            return ResponseEntity.ok(stationTO);
+        } catch (StationNotFoundException e) {
+            log.error("Station is not found with id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Exception occurred while fetching card with id {}: ", id, e); // Added 'e'
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

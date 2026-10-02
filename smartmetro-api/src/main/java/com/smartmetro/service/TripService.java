@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TripService{
     List<TripTO> findAllTrips() throws TripNotFoundException;
+    TripTO findTripById(Long id) throws TripNotFoundException;
 }

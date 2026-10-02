@@ -3,14 +3,13 @@ package com.smartmetro.service;
 import com.smartmetro.entity.Trip;
 import com.smartmetro.exception.TripNotFoundException;
 import com.smartmetro.model.TripTO;
-import com.smartmetro.model.UserTO;
 import com.smartmetro.repository.TripRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -37,5 +36,23 @@ public class TripServiceImpl implements TripService{
         }).toList();
         log.info("Total Users Found: {}", tripTOS.size());
         return tripTOS;
+    }
+
+    @Override
+    public TripTO findTripById(Long id) throws TripNotFoundException {
+        log.info("Inside the TripServiceImpl.findTripById() method");
+        Optional<Trip> trip = tripRepository.findById(id);
+        if(trip == null) {
+            log.error("Trip Not Found");
+            throw new TripNotFoundException("Trip Not Found");
+        }
+        Trip trips = trip.get();
+        TripTO tripTO = new TripTO();
+        tripTO.setTripId(trips.getTripId());
+        tripTO.setStartTime(trips.getStartTime());
+        tripTO.setEndTime(trips.getEndTime());
+        tripTO.setFareAmount(trips.getFareAmount());
+
+        return tripTO;
     }
 }

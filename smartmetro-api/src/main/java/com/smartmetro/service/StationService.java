@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface StationService {
     List<StationTO> findAllStations() throws StationNotFoundException;
+    StationTO findStationById(Long id) throws StationNotFoundException;
 }
