@@ -55,7 +55,6 @@ public class RouteStationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
     // GET /api/v1/routeStations/route/{routeId}
     @GetMapping("/route/{routeId}")
     public ResponseEntity<List<RouteStationTO>> getRouteStationsByRouteId(@PathVariable Long routeId) {

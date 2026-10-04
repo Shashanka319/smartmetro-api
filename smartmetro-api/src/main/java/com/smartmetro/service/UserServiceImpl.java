@@ -14,8 +14,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,7 +25,7 @@ public class UserServiceImpl implements UserService {
         log.info("Inside the UserServiceImpl.findAllUsers");
         List<User> users = userRepository.findAll();
         if(users.isEmpty()) {
-            log.error("Users are not Found");
+            log.error("User are not Found");
             throw new UserNotFoundException("Users are Empty");
         }
         List<UserTO> userTOS= users.stream().map(user -> {
@@ -53,7 +51,6 @@ public class UserServiceImpl implements UserService {
         }).toList();
         log.info("Total Users Found: {}", userTOS.size());
         return userTOS;
-
     }
 
     @Override
@@ -89,6 +86,52 @@ public class UserServiceImpl implements UserService {
             userTO.setMetroCards(metroCardTOSet);
         }
         return userTO;
+    }
+
+    @Override
+    public List<UserTO> findUserByName(String name) throws UserNotFoundException {
+        log.info("Inside the UserServiceImpl.findAllUsers");
+        List<User> users = userRepository.findByName(name);
+        if(users.isEmpty()) {
+            log.error("User are not Found");
+            throw new UserNotFoundException("Users are Empty");
+        }
+        List<UserTO> userTOS= users.stream().map(user -> {
+            UserTO userTO = new UserTO();
+            userTO.setUserId(user.getUserId());
+            userTO.setUserName(user.getUserName());
+            userTO.setPassword(user.getPassword());
+            userTO.setEmail(user.getEmail());
+            userTO.setRole(user.getRole());
+            userTO.setDate(user.getDate());
+            Set<MetroCardTO> metroCardTOSet = user.getMetroCards().stream().map(metroCard -> {
+                MetroCardTO metroCardTO = new MetroCardTO();
+                metroCardTO.setCardId(metroCard.getCardId());
+                metroCardTO.setCardNumber(metroCard.getCardNumber());
+                metroCardTO.setBalance(metroCard.getBalance());
+                metroCardTO.setIssuedDate(metroCard.getIssuedDate());
+                metroCardTO.setStatus(metroCard.getStatus());
+                return metroCardTO;
+            }).collect(Collectors.toSet());
+            userTO.setMetroCards(metroCardTOSet);
+
+            return userTO;
+        }).toList();
+        log.info("Total Users Found: {}", userTOS.size());
+        return userTOS;
+    }
+
+    @Override
+    public String deleteUserByID(int id) throws UserNotFoundException {
+        log.info("Inside the UserServiceImpl.findUserByID");
+        Optional<User> users = userRepository.findById(id);
+        if(users.isEmpty()) {
+            log.error("Users are not Found");
+            throw new UserNotFoundException("Users are Empty");
+        }
+            userRepository.deleteById(id);
+            return "User Detailes are Deleted";
+
     }
 
 }
