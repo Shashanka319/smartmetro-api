@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -136,5 +137,17 @@ public class MetroCardServiceImpl implements MetroCardService {
         }
 
         return metroCardTO;
+    }
+
+    @Override
+    public String deleteMetroCardById(Long id) throws MetroCardNotFoundException {
+        log.info("Inside the MetroCardServioceImpl.deleteMetroCardById");
+        Optional<MetroCard> metroCard = metroCardRepository.findById(id);
+        if (metroCard.isEmpty()) {
+            log.error("MetroCard not Found");
+            throw new MetroCardNotFoundException("MetroCard is Empty");
+        }
+        metroCardRepository.deleteById(id);
+        return "MetroCard is Deleted Successfully";
     }
 }

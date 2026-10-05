@@ -10,4 +10,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
    // List<User> findByName(String name);
    @Query(value="SELECT u FROM User u WHERE u.userName = ?1" )
     List<User> findByName(String name);
+
+   @Query(value = "SELECT u FROM User u WHERE u.userName=?1")
+   void deleteByName(String name);
 }

@@ -8,5 +8,6 @@ import java.util.List;
 public interface MetroCardService {
     List<MetroCardTO> findAllMetroCards() throws MetroCardNotFoundException;
     public MetroCardTO findMetroCardById(Long id) throws MetroCardNotFoundException;
+    public String deleteMetroCardById(Long id) throws MetroCardNotFoundException;
 
 }

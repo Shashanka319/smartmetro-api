@@ -1,11 +1,8 @@
 package com.smartmetro.controller;
 
-import com.smartmetro.entity.User;
 import com.smartmetro.exception.UserNotFoundException;
-import com.smartmetro.model.MetroCardTO;
 import com.smartmetro.model.UserTO;
 import com.smartmetro.service.UserService;
-import com.smartmetro.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,7 +73,7 @@ public class UserController {
         log.info("Inside the deleteUserById method");
         String userName=null;
         try{
-            userName=userService.deleteUserByID(id);
+            userName=userService.deleteUserById(id);
         }catch (UserNotFoundException e){
             log.error("User not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -86,6 +83,22 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(userName,HttpStatus.OK);
+    }
+    @DeleteMapping("/name")
+    public ResponseEntity<String> deleteUserByName(@RequestParam String userName) {
+        log.info("Inside the deleteUserByName method");
+        String name=null;
+        try{
+            name=userService.deleteUserByName(userName);
+        }catch (UserNotFoundException e){
+            log.error("User not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            log.error("Exception Occured Check Once");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(name,HttpStatus.OK);
     }
 
 }

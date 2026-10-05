@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,5 +48,21 @@ public class PaymentController {
             log.error("Exception occurred while fetching card with id {}: ", id, e); // Added 'e'
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PaymentTO> deletePaymentById(@PathVariable Long id) {
+        log.info("Inside the deletePayment method for id: {}", id);
+        String payment = null;
+        try{
+            payment=paymentService.deletePaymentById(id);
+        }catch (PaymentNotFoundException e){
+            log.error("Payment not found with id: {}", id);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            log.error("Exception occurred while deleting card with id {}: ", id, e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

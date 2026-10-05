@@ -9,5 +9,6 @@ public interface UserService {
     public List<UserTO> findAllUsers() throws UserNotFoundException;
     public UserTO findUserByID(int id) throws UserNotFoundException;
     public List<UserTO> findUserByName(String name) throws UserNotFoundException;
-    public String deleteUserByID(int id) throws UserNotFoundException;
+    public String deleteUserById(int id) throws UserNotFoundException;
+    public String deleteUserByName(String name) throws UserNotFoundException;
 }

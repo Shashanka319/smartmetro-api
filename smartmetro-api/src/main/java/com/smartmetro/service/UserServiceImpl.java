@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUserByID(int id) throws UserNotFoundException {
+    public String deleteUserById(int id) throws UserNotFoundException {
         log.info("Inside the UserServiceImpl.findUserByID");
         Optional<User> users = userRepository.findById(id);
         if(users.isEmpty()) {
@@ -132,6 +132,18 @@ public class UserServiceImpl implements UserService {
             userRepository.deleteById(id);
             return "User Detailes are Deleted";
 
+    }
+
+    @Override
+    public String deleteUserByName(String name) throws UserNotFoundException {
+        log.info("Inside the UserServiceImpl.deleteUserByName");
+        List<User> user = userRepository.findByName(name);
+        if(user.isEmpty()||user ==null) {
+            log.error("Users are not Found");
+            throw new UserNotFoundException("Users are Empty");
+        }
+        userRepository.deleteByName(name);
+        return "User Data are Deleted  ";
     }
 
 }

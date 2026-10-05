@@ -22,8 +22,9 @@ public class MetroCardController {
     @GetMapping
     public ResponseEntity<List<MetroCardTO>> getAllMetroCards() {
         log.info("Inside the getAllMetroCards method");
+        List<MetroCardTO> metroCardTOS =null;
         try {
-            List<MetroCardTO> metroCardTOS = metroCardService.findAllMetroCards();
+            metroCardTOS   = metroCardService.findAllMetroCards();
             return ResponseEntity.ok(metroCardTOS);
         } catch (MetroCardNotFoundException e) {
             log.error("MetroCard not found: {}", e.getMessage());
@@ -36,8 +37,9 @@ public class MetroCardController {
     @GetMapping("/{id}")
     public ResponseEntity<MetroCardTO> getMetroCardById(@PathVariable Long id) {
         log.info("Inside the getMetroCardById method for id: {}", id);
+        MetroCardTO metroCardTO = null;
         try {
-            MetroCardTO metroCardTO = metroCardService.findMetroCardById(id);
+             metroCardTO = metroCardService.findMetroCardById(id);
             return ResponseEntity.ok(metroCardTO);
         } catch (MetroCardNotFoundException e) {
             log.error("MetroCard not found with id: {}", id);
@@ -47,4 +49,19 @@ public class MetroCardController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+   @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMetroCardById(@PathVariable Long id){
+        log.info("Inside the deleteMetroCardById method for id: {}", id);
+        String metroCardId = null;
+        try{
+            metroCardId = metroCardService.deleteMetroCardById(id);
+        }catch (MetroCardNotFoundException e){
+            log.error("MetroCard not found with id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }catch (Exception e){
+            log.error("Exception occurred while fetching card with id {}: ", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return new  ResponseEntity<>(metroCardId, HttpStatus.OK);
+   }
 }

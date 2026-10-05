@@ -35,13 +35,13 @@ public class MetroCard {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "metroCard")
+    @OneToMany(mappedBy = "metroCard",cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Trip> trips;
 
-    @OneToMany(mappedBy = "metroCard")
+    @OneToMany(mappedBy = "metroCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TransactionHistory> transactionHistories;
 
-    @OneToMany(mappedBy = "metroCard")
+    @OneToMany(mappedBy = "metroCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Payment> payments;
 
 }

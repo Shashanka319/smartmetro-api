@@ -55,4 +55,16 @@ public class PaymentServiceImpl  implements PaymentService {
         paymentTO.setPaymentDate(payments.get().getPaymentDate());
         return paymentTO;
     }
+
+    @Override
+    public String deletePaymentById(Long paymentId) throws PaymentNotFoundException {
+        log.info("Inside the PaymentServiceImpl.deletePaymentById");
+        Optional<Payment> payments = paymentRepository.findById(paymentId);
+        if(payments.isEmpty()) {
+            log.error("Payment not found");
+            throw new PaymentNotFoundException("Payment not found");
+        }
+        paymentRepository.deleteById(paymentId);
+        return "Payment data is deleted acc"+paymentId;
+    }
 }
