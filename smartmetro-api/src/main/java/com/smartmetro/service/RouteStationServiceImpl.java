@@ -8,6 +8,7 @@ import com.smartmetro.repository.RouteStationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // <-- Fixes: Cannot resolve symbol 'Transactional'
 
 import java.util.List;
 
@@ -68,6 +69,29 @@ public class RouteStationServiceImpl implements RouteStationService {
                 .toList();
     }
 
+    @Override
+    @Transactional
+    public String deleteRouteStationById(Long routeId, Long stationId) throws RouteStationNotFoundException {
+        log.info("Inside RouteStationServiceImpl.deleteRouteStationById for routeId: {} and stationId: {}", routeId, stationId);
+
+        RouteStationPK pk = new RouteStationPK();
+        pk.setRoute(routeId);
+        pk.setStation(stationId);
+
+        RouteStation routeStation = routeStationRepository.findById(pk)
+                .orElseThrow(() -> {
+                    log.error("RouteStation not found for routeId: {} and stationId: {}", routeId, stationId);
+                    return new RouteStationNotFoundException(
+                            "RouteStation not found for Route ID: " + routeId + " and Station ID: " + stationId);
+                });
+
+        routeStationRepository.delete(routeStation);
+
+        log.info("Successfully deleted RouteStation mapping for routeId: {} and stationId: {}", routeId, stationId);
+        return "Successfully deleted RouteStation mapping for Route ID: " + routeId + " and Station ID: " + stationId;
+    }
+
+    // Fixes: Cannot resolve method 'mapToTO'
     private RouteStationTO mapToTO(RouteStation routeStation) {
         RouteStationTO to = new RouteStationTO();
         if (routeStation.getRoute() != null) {

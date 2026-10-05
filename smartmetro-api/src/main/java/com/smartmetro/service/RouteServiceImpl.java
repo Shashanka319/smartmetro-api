@@ -72,4 +72,16 @@ public class RouteServiceImpl implements RouteService {
         }
         return routeTO;
     }
+
+    @Override
+    public String deleteRouteById(Long id) throws RouteNotFoundException {
+        log.info("Inside the RouteServiceImpl.deleteRouteById");
+        Optional<Route> route = routeRepository.findById(id);
+        if(route.isEmpty()){
+            log.error("Route not found");
+            throw new RouteNotFoundException("Route not found");
+        }
+        routeRepository.deleteById(id);
+        return "Successfully Route deleted acc "+id;
+    }
 }

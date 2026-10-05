@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +56,7 @@ public class RouteStationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
     // GET /api/v1/routeStations/route/{routeId}
     @GetMapping("/route/{routeId}")
     public ResponseEntity<List<RouteStationTO>> getRouteStationsByRouteId(@PathVariable Long routeId) {
@@ -68,6 +70,24 @@ public class RouteStationController {
         } catch (Exception e) {
             log.error("Exception occurred while fetching route stations for routeId: {}", routeId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // DELETE /api/v1/routeStations/route/{routeId}/station/{stationId}
+    @DeleteMapping("/route/{routeId}/station/{stationId}")
+    public ResponseEntity<String> deleteRouteStationById(
+            @PathVariable Long routeId,
+            @PathVariable Long stationId) {
+        log.info("Inside deleteRouteStationById endpoint for routeId: {} and stationId: {}", routeId, stationId);
+        try {
+            String message = routeStationService.deleteRouteStationById(routeId, stationId);
+            return ResponseEntity.ok(message);
+        } catch (RouteStationNotFoundException e) {
+            log.error("RouteStation not found for deletion with routeId: {} and stationId: {}", routeId, stationId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            log.error("Exception occurred while deleting route station for routeId: {} and stationId: {}", routeId, stationId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete route station");
         }
     }
 }

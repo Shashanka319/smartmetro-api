@@ -9,4 +9,5 @@ import java.util.List;
 public interface RouteService {
     List<RouteTO> findAllRoutes() throws RouteNotFoundException;
     RouteTO findRouteById(Long id) throws RouteNotFoundException;
+    String deleteRouteById(Long id) throws RouteNotFoundException;
 }
