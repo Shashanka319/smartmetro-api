@@ -2,9 +2,10 @@ package com.smartmetro.service;
 
 import com.smartmetro.entity.Route;
 import com.smartmetro.exception.RouteNotFoundException;
+import com.smartmetro.exception.RouteStationNotFoundException;
+import com.smartmetro.model.RouteRequest;
 import com.smartmetro.model.RouteStationTO;
 import com.smartmetro.model.RouteTO;
-import com.smartmetro.model.UserTO;
 import com.smartmetro.repository.RouteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +84,16 @@ public class RouteServiceImpl implements RouteService {
         }
         routeRepository.deleteById(id);
         return "Successfully Route deleted acc "+id;
+    }
+
+    @Override
+    public long saveRoute(RouteRequest routeRequest) throws RouteStationNotFoundException {
+        log.info("Inside the RouteServiceImpl.saveRoute");
+        Route route = new Route();
+        if(routeRequest.getRouteName() == null || routeRequest.getRouteName().isEmpty()){
+            route.setRouteName(routeRequest.getRouteName());
+        }
+        Route save = routeRepository.save(route);
+        return save.getRouteId();
     }
 }

@@ -2,6 +2,7 @@ package com.smartmetro.service;
 
 import com.smartmetro.entity.TransactionHistory;
 import com.smartmetro.exception.TransactionHistoryNotFoundException;
+import com.smartmetro.model.TransactionHistoryRequest;
 import com.smartmetro.model.TransactionHistoryTO;
 import com.smartmetro.repository.TransactionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +55,19 @@ public class TransactionServiceImpl implements TransactionService {
         transactionHistoryTO.setTransactionDate(transactionHistory1.getTransactionDate());
 
         return transactionHistoryTO;
+    }
+
+    @Override
+    public long save(TransactionHistoryRequest transactionHistoryRequest) throws TransactionHistoryNotFoundException {
+        log.info("Inside the TransactionHistory.save");
+        TransactionHistory transactionHistory = new TransactionHistory();
+        if(transactionHistoryRequest.getTransactionType() == null) {
+            transactionHistory.setTransactionType(transactionHistoryRequest.getTransactionType());
+        }
+        if(transactionHistoryRequest.getAmount()==0.0){
+            transactionHistory.setAmount(transactionHistoryRequest.getAmount());
+        }
+        TransactionHistory savedTransactionHistory = transactionRepository.save(transactionHistory);
+        return savedTransactionHistory.getTransactionId();
     }
 }

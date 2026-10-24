@@ -2,6 +2,7 @@ package com.smartmetro.service;
 
 import com.smartmetro.entity.Payment;
 import com.smartmetro.exception.PaymentNotFoundException;
+import com.smartmetro.model.PaymentRequest;
 import com.smartmetro.model.PaymentTO;
 import com.smartmetro.repository.PaymentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -66,5 +67,23 @@ public class PaymentServiceImpl  implements PaymentService {
         }
         paymentRepository.deleteById(paymentId);
         return "Payment data is deleted acc"+paymentId;
+    }
+
+    @Override
+    public long savePayment(PaymentRequest paymentRequest) throws PaymentNotFoundException {
+        log.info("Inside the PaymentServiceImpl.savePayment");
+        Payment  payment = new Payment();
+        if(paymentRequest.getAmount() == 0.0){
+            payment.setAmount(paymentRequest.getAmount());
+        }
+        if(paymentRequest.getPaymentType()==null){
+            payment.setPaymentType(paymentRequest.getPaymentType());
+        }
+        if(paymentRequest.getPaymentStatus()==null){
+            payment.setPaymentStatus(paymentRequest.getPaymentStatus());
+        }
+        Payment save =  paymentRepository.save(payment);
+
+        return save.getPaymentId();
     }
 }

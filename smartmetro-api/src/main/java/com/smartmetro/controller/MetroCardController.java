@@ -1,7 +1,10 @@
 package com.smartmetro.controller;
 
 import com.smartmetro.exception.MetroCardNotFoundException;
+import com.smartmetro.exception.UserNotFoundException;
+import com.smartmetro.model.MetroCardRequest;
 import com.smartmetro.model.MetroCardTO;
+import com.smartmetro.model.UserRequest;
 import com.smartmetro.service.MetroCardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,4 +67,13 @@ public class MetroCardController {
         }
         return new  ResponseEntity<>(metroCardId, HttpStatus.OK);
    }
+    @PostMapping
+    public ResponseEntity<Long> saveMetroCard(@RequestBody MetroCardRequest metroCardRequest) throws MetroCardNotFoundException, UserNotFoundException {
+        log.info("Inside the MetroCard Controller.saveMetroCard method");
+        long metroCardId = metroCardService.save(metroCardRequest);
+        log.info("MetroCard Data saved Successfully with id: {}", metroCardId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(metroCardId);
+    }
+
+
 }

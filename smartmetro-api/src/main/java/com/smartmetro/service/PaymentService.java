@@ -1,6 +1,7 @@
 package com.smartmetro.service;
 
 import com.smartmetro.exception.PaymentNotFoundException;
+import com.smartmetro.model.PaymentRequest;
 import com.smartmetro.model.PaymentTO;
 
 import java.util.List;
@@ -9,4 +10,5 @@ public interface PaymentService {
     List<PaymentTO> findAllPayments() throws PaymentNotFoundException;
     PaymentTO findPaymentById(Long paymentId) throws PaymentNotFoundException;
     String deletePaymentById(Long paymentId) throws PaymentNotFoundException;
+    long savePayment(PaymentRequest paymentRequest) throws PaymentNotFoundException;
 }

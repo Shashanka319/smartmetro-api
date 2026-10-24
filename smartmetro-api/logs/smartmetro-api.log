@@ -1520,3 +1520,8 @@ Error : 1, Position : 0, SQL = insert into users (created_at,email,password_hash
 2026-10-24T19:52:15.742+05:30  INFO 17192 --- [smartmetro-api] [http-nio-8084-exec-6] com.smartmetro.service.UserServiceImpl   : Inside the UserServiceImpl.update, userId=6, userTO=UserUpdateRequest(userId=6, userName=Sudeep, email=sudeep@gmail.com, phone=9765746454, password=sudeep123, role=Passanger)
 2026-10-24T19:52:15.872+05:30  INFO 17192 --- [smartmetro-api] [http-nio-8084-exec-6] com.smartmetro.service.UserServiceImpl   : User updated successfully with id: 6
 2026-10-24T19:52:15.872+05:30  INFO 17192 --- [smartmetro-api] [http-nio-8084-exec-6] c.smartmetro.controller.UserController   : User data is updated successfully for id: 6
+2026-10-24T20:40:03.082+05:30  INFO 17192 --- [smartmetro-api] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-24T20:40:03.091+05:30  INFO 17192 --- [smartmetro-api] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-24T20:40:03.112+05:30  INFO 17192 --- [smartmetro-api] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-24T20:40:03.123+05:30  INFO 17192 --- [smartmetro-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-24T20:40:03.131+05:30  INFO 17192 --- [smartmetro-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

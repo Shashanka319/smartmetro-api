@@ -4,6 +4,7 @@ import com.smartmetro.entity.RouteStation;
 import com.smartmetro.entity.Station;
 import com.smartmetro.exception.StationNotFoundException;
 import com.smartmetro.model.RouteStationTO;
+import com.smartmetro.model.StationRequest;
 import com.smartmetro.model.StationTO;
 import com.smartmetro.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,23 @@ public class StationServiceImpl implements StationService {
                     log.error("Station with ID {} not found", id);
                     return new StationNotFoundException("Station not found for ID: " + id);
                 });
+    }
+
+    @Override
+    public long saveStation(StationRequest stationRequest) throws StationNotFoundException {
+        log.info("Inside the StationServiceImpl.saveStation");
+        Station station = new  Station();
+        if(stationRequest.getStationName() == null || stationRequest.getStationName().isEmpty()) {
+            station.setStationName(stationRequest.getStationName());
+        }
+        if(stationRequest.getStationCode().isEmpty()){
+            station.setStationCode(stationRequest.getStationCode());
+        }
+        if(stationRequest.getLocation() == null || stationRequest.getLocation().isEmpty()) {
+            station.setLOCATION(stationRequest.getLocation());
+        }
+        Station save =  stationRepository.save(station);
+        return save.getStationId();
     }
 
     private StationTO mapToStationTO(Station station) {
