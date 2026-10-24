@@ -2,16 +2,14 @@ package com.smartmetro.controller;
 
 import com.smartmetro.exception.MetroCardNotFoundException;
 import com.smartmetro.exception.TransactionHistoryNotFoundException;
+import com.smartmetro.model.TransactionHistoryRequest;
 import com.smartmetro.model.TransactionHistoryTO;
 import com.smartmetro.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @Slf4j
@@ -50,5 +48,13 @@ public class TransactionController {
             log.error("Exception occurred while fetching card with id {}: ", id, e); // Added 'e'
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    @PostMapping
+    public ResponseEntity<Long> saveTransaction(@RequestBody TransactionHistoryRequest transactionRequest)
+            throws TransactionHistoryNotFoundException{
+        log.info("Inside the Transaction Controller.saveTransaction method");
+        long transactionId = transactionService.save(transactionRequest);
+        log.info("Transaction Data saved Successfully with id: {}", transactionId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionId);
     }
 }

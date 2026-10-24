@@ -2,6 +2,7 @@ package com.smartmetro.controller;
 
 import com.smartmetro.exception.MetroCardNotFoundException;
 import com.smartmetro.exception.PaymentNotFoundException;
+import com.smartmetro.model.PaymentRequest;
 import com.smartmetro.model.PaymentTO;
 import com.smartmetro.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -64,5 +65,13 @@ public class PaymentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping
+    public ResponseEntity<Long> savePayment(@RequestBody PaymentRequest paymentRequest)
+            throws PaymentNotFoundException, MetroCardNotFoundException {
+        log.info("Inside the Payment Controller.savePayment method");
+        long paymentId = paymentService.savePayment(paymentRequest);
+        log.info("Payment Data saved Successfully with id: {}", paymentId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(paymentId);
     }
 }
