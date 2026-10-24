@@ -1,7 +1,9 @@
 package com.smartmetro.controller;
 
 import com.smartmetro.exception.UserNotFoundException;
+import com.smartmetro.model.UserRequest;
 import com.smartmetro.model.UserTO;
+import com.smartmetro.model.UserUpdateRequest;
 import com.smartmetro.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +101,23 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(name,HttpStatus.OK);
+    }
+    @PostMapping
+    public ResponseEntity<Integer> saveUser(@RequestBody UserRequest userRequest) throws UserNotFoundException{
+        log.info("Inside the User Controller.saveUser method,UserTO:{}", userRequest);
+        int userID= userService.save(userRequest);
+        log.info("User Data is saved successfully",userID);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userID);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Integer> updateUser(@PathVariable("id") int userId,
+                                              @RequestBody UserUpdateRequest userUpdateRequest) throws UserNotFoundException {
+        log.info("Inside the UserController.updateUser method, userId:{}, UserTO:{}", userId, userUpdateRequest);
+
+        int updatedUserId = userService.update(userId, userUpdateRequest);
+        log.info("User data is updated successfully for id: {}", updatedUserId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedUserId);
     }
 
 }
