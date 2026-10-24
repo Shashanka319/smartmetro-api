@@ -2,16 +2,12 @@ package com.smartmetro.service;
 
 import com.smartmetro.entity.MetroCard;
 import com.smartmetro.exception.MetroCardNotFoundException;
-import com.smartmetro.model.MetroCardTO;
-import com.smartmetro.model.PaymentTO;
-import com.smartmetro.model.TransactionHistoryTO;
-import com.smartmetro.model.TripTO;
+import com.smartmetro.model.*;
 import com.smartmetro.repository.MetroCardRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -150,4 +146,21 @@ public class MetroCardServiceImpl implements MetroCardService {
         metroCardRepository.deleteById(id);
         return "MetroCard is Deleted Successfully";
     }
-}
+
+    @Override
+    public long save(MetroCardRequest metroCardRequest) throws MetroCardNotFoundException {
+        log.info("Inside the MetroCardServiceImpl.saveMetroCardRequest");
+        MetroCard metroCard = new MetroCard();
+        if(metroCardRequest.getCardNumber() == null || metroCardRequest.getCardNumber().isEmpty()) {
+            metroCard.setCardNumber(metroCardRequest.getCardNumber());
+        }
+       if(metroCardRequest.getBalance() == 0.0){
+           metroCard.setBalance(metroCardRequest.getBalance());
+       }
+       if(metroCardRequest.getStatus() == null){
+           metroCard.setStatus(metroCardRequest.getStatus());
+       }
+       MetroCard metroCard1 = metroCardRepository.save(metroCard);
+        return (metroCard1.getCardId());
+    }
+}   `

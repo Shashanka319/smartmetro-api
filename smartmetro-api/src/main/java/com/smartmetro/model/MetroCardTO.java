@@ -5,12 +5,14 @@ import com.smartmetro.entity.TransactionHistory;
 import com.smartmetro.entity.Trip;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
 @Setter
+@ToString
 public class MetroCardTO {
     private Long cardId;
 

@@ -1,5 +1,6 @@
 package com.smartmetro.entity;
 
+import com.smartmetro.model.PaymentTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,5 +44,6 @@ public class MetroCard {
 
     @OneToMany(mappedBy = "metroCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Payment> payments;
+
 
 }
