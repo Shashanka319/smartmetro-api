@@ -10,6 +10,7 @@ import com.smartmetro.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -183,6 +184,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    //@Transactional
     public int update(int userId, UserUpdateRequest userTO) throws UserNotFoundException {
         log.info("Inside the UserServiceImpl.update, userId={}, userTO={}", userId, userTO);
         Optional<User> savedUser = userRepository.findById(userId);
@@ -190,7 +192,6 @@ public class UserServiceImpl implements UserService {
             log.error("Users are not Saved");
             throw new UserNotFoundException("Users are Empty");
         }
-
         User user=savedUser.get();
         if(user.getUserId()!=null){
             user.setUserId(user.getUserId());

@@ -36,14 +36,22 @@ public class UserServiceImplTest {
         user.setRole("testrole");
         userList.add(user);
 
+        User user1 = new User();
+        user1.setUserId(2);
+        user1.setUserName("name");
+        user1.setPassword("password");
+        user1.setEmail("email");
+        user1.setRole("role");
+        userList.add(user1);
+
         when(userRepository.findAll()).thenReturn(userList);
 
         List<UserTO> userTOS = userServiceImpl.findAllUsers();
-        assertEquals(1, userTOS.size());
+        assertEquals(2, userTOS.size());
     }
 
     @Test
-    public void testGetAllUsers_whenUserNotExist_thenThrowException(){
+    public void testGetAllUsers_whenUserNotExist_thenThrowException() {
         List<User> userList = null;
         when(userRepository.findAll()).thenReturn(userList);
 
