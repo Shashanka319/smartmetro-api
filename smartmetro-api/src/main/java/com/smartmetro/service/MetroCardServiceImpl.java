@@ -24,9 +24,12 @@ public class MetroCardServiceImpl implements MetroCardService {
     public List<MetroCardTO> findAllMetroCards() throws MetroCardNotFoundException {
         log.info("Inside the MetroCardServiceImpl.findAllMetroCards");
         List<MetroCard> metroCards = metroCardRepository.findAll();
-        if (metroCards.isEmpty()) {
+        if (metroCards==null||metroCards.isEmpty()) {
             log.error("MetroCards are not Found");
             throw new MetroCardNotFoundException("MetroCards are Empty");
+        }
+        if(metroCards!=null && metroCards.isEmpty()){
+
         }
 
         List<MetroCardTO> metroCardTOS = metroCards.stream().map(metroCard -> {

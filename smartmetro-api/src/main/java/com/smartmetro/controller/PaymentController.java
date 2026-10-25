@@ -66,12 +66,5 @@ public class PaymentController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @PostMapping
-    public ResponseEntity<Long> savePayment(@RequestBody PaymentRequest paymentRequest)
-            throws PaymentNotFoundException, MetroCardNotFoundException {
-        log.info("Inside the Payment Controller.savePayment method");
-        long paymentId = paymentService.savePayment(paymentRequest);
-        log.info("Payment Data saved Successfully with id: {}", paymentId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(paymentId);
-    }
+
 }

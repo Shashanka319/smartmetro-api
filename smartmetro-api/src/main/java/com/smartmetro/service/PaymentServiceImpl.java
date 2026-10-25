@@ -22,7 +22,7 @@ public class PaymentServiceImpl  implements PaymentService {
     public List<PaymentTO> findAllPayments() throws PaymentNotFoundException {
         log.info("Inside the PaymentServiceImpl.findAllUsers");
         List<Payment> payments = paymentRepository.findAll();
-        if(payments.isEmpty()) {
+        if(payments == null||payments.isEmpty()) {
             log.error("Users are not Found");
             throw new PaymentNotFoundException("Users are Empty");
         }

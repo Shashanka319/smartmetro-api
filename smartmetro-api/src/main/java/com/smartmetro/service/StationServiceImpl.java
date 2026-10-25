@@ -26,7 +26,7 @@ public class StationServiceImpl implements StationService {
         log.info("Inside the StationServiceImpl.findAllStations");
         List<Station> stations = stationRepository.findAll();
 
-        if (stations.isEmpty()) {
+        if (stations==null ||stations.isEmpty()) {
             log.error("No stations found in the database");
             throw new StationNotFoundException("Stations are Empty");
         }

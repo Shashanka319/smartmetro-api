@@ -26,7 +26,7 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteTO> findAllRoutes() throws RouteNotFoundException {
         log.info("Inside the RouteServiceImpl.findAllUsers");
         List<Route> routes = routeRepository.findAll();
-        if(routes.isEmpty()) {
+        if(routes==null||routes.isEmpty()) {
             log.error("Routes are not Found");
             throw new RouteNotFoundException("Routes are Empty");
         }

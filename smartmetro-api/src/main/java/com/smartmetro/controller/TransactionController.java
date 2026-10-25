@@ -49,12 +49,5 @@ public class TransactionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @PostMapping
-    public ResponseEntity<Long> saveTransaction(@RequestBody TransactionHistoryRequest transactionRequest)
-            throws TransactionHistoryNotFoundException{
-        log.info("Inside the Transaction Controller.saveTransaction method");
-        long transactionId = transactionService.save(transactionRequest);
-        log.info("Transaction Data saved Successfully with id: {}", transactionId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(transactionId);
-    }
+
 }

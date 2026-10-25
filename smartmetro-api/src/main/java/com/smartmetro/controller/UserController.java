@@ -103,11 +103,16 @@ public class UserController {
         return new ResponseEntity<>(name,HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<Integer> saveUser(@RequestBody UserRequest userRequest) throws UserNotFoundException{
-        log.info("Inside the User Controller.saveUser method,UserTO:{}", userRequest);
-        int userID= userService.save(userRequest);
-        log.info("User Data is saved successfully",userID);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userID);
+    public ResponseEntity<Integer> saveUser(@RequestBody UserRequest userRequest) {
+        log.info("Inside the User Controller.saveUser method, UserTO:{}", userRequest);
+        try {
+            int userID = userService.save(userRequest);
+            log.info("User Data is saved successfully: {}", userID);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userID);
+        } catch (Exception e) {
+            log.error("Exception occurred while saving user", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @PutMapping("/{id}")
     public ResponseEntity<Integer> updateUser(@PathVariable("id") int userId,

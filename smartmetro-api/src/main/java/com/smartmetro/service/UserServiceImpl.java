@@ -27,20 +27,24 @@ public class UserServiceImpl implements UserService {
     public List<UserTO> findAllUsers() throws UserNotFoundException {
         log.info("Inside the UserServiceImpl.findAllUsers");
         List<User> users = userRepository.findAll();
-        if(users == null||users.isEmpty()) {
-            log.error("User are not Found");
-            throw new UserNotFoundException("Users are Empty");
+
+        if (users == null || users.isEmpty()) {
+            log.error("Users are not found");
+            throw new UserNotFoundException("Users are empty");
         }
-        if(users != null && !users.isEmpty()) {}
-        List<UserTO> userTOS= users.stream().map(user -> {
+
+        List<UserTO> userTOS = users.stream().map(user -> {
             UserTO userTO = new UserTO();
             userTO.setUserId(user.getUserId());
             userTO.setUserName(user.getUserName());
             userTO.setPassword(user.getPassword());
+            userTO.setPhone(user.getPhone());
             userTO.setEmail(user.getEmail());
             userTO.setRole(user.getRole());
             userTO.setDate(user.getDate());
-            if(userTO.getMetroCards() != null) {
+
+            // Check user (the database entity), not userTO
+            if (user.getMetroCards() != null) {
                 Set<MetroCardTO> metroCardTOSet = user.getMetroCards().stream().map(metroCard -> {
                     MetroCardTO metroCardTO = new MetroCardTO();
                     metroCardTO.setCardId(metroCard.getCardId());
@@ -50,12 +54,13 @@ public class UserServiceImpl implements UserService {
                     metroCardTO.setStatus(metroCard.getStatus());
                     return metroCardTO;
                 }).collect(Collectors.toSet());
+
                 userTO.setMetroCards(metroCardTOSet);
             }
 
-
             return userTO;
         }).toList();
+
         log.info("Total Users Found: {}", userTOS.size());
         return userTOS;
     }

@@ -21,7 +21,7 @@ public class TripServiceImpl implements TripService{
     public List<TripTO> findAllTrips() throws TripNotFoundException {
         log.info("Inside the TripServiceImpl.findAllTrips() method");
         List<Trip> trips = tripRepository.findAll();
-        if(trips.isEmpty()) {
+        if(trips==null ||trips.isEmpty()) {
             log.error("Trips are not Found");
             throw new TripNotFoundException("Trips are Empty");
         }
